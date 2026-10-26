@@ -27,11 +27,11 @@ function ResetPassword() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (pw.length < 8) return toast.error("La contraseña debe tener al menos 8 caracteres.");
+    if (pw.length < 8) { toast.error("La contraseña debe tener al menos 8 caracteres."); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: pw });
     setBusy(false);
-    if (error) return toast.error("El enlace ha caducado o no es válido. Solicita uno nuevo.");
+    if (error) { toast.error("El enlace ha caducado o no es válido. Solicita uno nuevo."); return; }
     toast.success("Contraseña actualizada");
     navigate({ to: "/inicio", replace: true });
   }

@@ -186,7 +186,7 @@ function CreateWorkerDialog({ open, onOpenChange, onDone }: { open: boolean; onO
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const err = validateWorkerInput(f);
-    if (err) return toast.error(err);
+    if (err) { toast.error(err); return; }
     setBusy(true);
     try {
       await create({ data: f });
@@ -230,11 +230,11 @@ function EditWorkerDialog({ worker, onClose, onDone }: { worker: Worker; onClose
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.full_name.trim()) return toast.error("Indica un nombre válido.");
+    if (!f.full_name.trim()) { toast.error("Indica un nombre válido."); return; }
     setBusy(true);
     const { error } = await supabase.from("profiles").update({ ...f, phone: f.phone || null }).eq("id", worker.id);
     setBusy(false);
-    if (error) return toast.error("No se pudieron guardar los cambios.");
+    if (error) { toast.error("No se pudieron guardar los cambios."); return; }
     toast.success("Cambios guardados");
     onDone();
     onClose();
@@ -268,7 +268,7 @@ function ResetPasswordDialog({ worker, onClose }: { worker: Worker; onClose: () 
           className="grid gap-3"
           onSubmit={async (e) => {
             e.preventDefault();
-            if (pw.length < 8) return toast.error("La contraseña debe tener al menos 8 caracteres.");
+            if (pw.length < 8) { toast.error("La contraseña debe tener al menos 8 caracteres."); return; }
             setBusy(true);
             try {
               await reset({ data: { workerId: worker.id, password: pw } });

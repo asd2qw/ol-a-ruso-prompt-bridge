@@ -41,23 +41,23 @@ function Configuracion() {
       return data;
     },
   });
-  const [form, setForm] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<Partial<Record<(typeof FIELDS)[number]["key"], string>>>({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (company) setForm(Object.fromEntries(FIELDS.map((f) => [f.key, String(company[f.key] ?? "")])));
+    if (company) setForm(Object.fromEntries(FIELDS.map((f) => [f.key, String(company[f.key] ?? "")])) as typeof form);
   }, [company]);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
     const vat = Number(form.default_vat);
-    if (!form.name?.trim()) return toast.error("El nombre comercial es obligatorio.");
-    if (Number.isNaN(vat) || vat < 0 || vat > 100) return toast.error("IVA no válido.");
+    if (!form.name?.trim()) { toast.error("El nombre comercial es obligatorio."); return; }
+    if (Number.isNaN(vat) || vat < 0 || vat > 100) { toast.error("IVA no válido."); return; }
     setSaving(true);
     const { error } = await supabase
       .from("companies")
       .update({
-        name: form.name.trim(),
+        name: form.name!.trim(),
         legal_name: form.legal_name || null,
         tax_id: form.tax_id || null,
         address: form.address || null,
@@ -69,7 +69,7 @@ function Configuracion() {
       })
       .eq("id", user!.companyId);
     setSaving(false);
-    if (error) return toast.error("No se pudieron guardar los datos.");
+    if (error) { toast.error("No se pudieron guardar los datos."); return; }
     toast.success("Datos guardados");
     qc.invalidateQueries({ queryKey: ["company"] });
   }
