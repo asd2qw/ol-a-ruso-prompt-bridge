@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { canAddWorker, validateWorkerInput, type WorkerInput } from "./workers-rules";
+import { changeWorkerAccess } from "./worker-access";
 
 type Ctx = { supabase: any; userId: string };
 
@@ -73,12 +74,25 @@ export const setWorkerActive = createServerFn({ method: "POST" })
     const companyId = await requireOwner(context as Ctx);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await getWorkerInCompany(supabaseAdmin, data.workerId, companyId);
-    const { error } = await supabaseAdmin.auth.admin.updateUserById(data.workerId, {
-      ban_duration: data.active ? "none" : "876000h",
+    await changeWorkerAccess(data.active, {
+      setProfileActive: async (active) => {
+        const { data: profile, error } = await supabaseAdmin.from("profiles")
+          .update({ active }).eq("id", data.workerId).eq("company_id", companyId)
+          .select("id").maybeSingle();
+        if (error || !profile) throw new Error("No se pudo actualizar el acceso del trabajador.");
+      },
+      setAuthActive: async (active) => {
+        const { error } = await supabaseAdmin.auth.admin.updateUserById(data.workerId, {
+          ban_duration: active ? "none" : "876000h",
+        });
+        if (error) throw new Error("No se pudo actualizar el bloqueo de la cuenta. Reintenta la operacion.");
+      },
     });
-    if (error) throw new Error("No se pudo actualizar la cuenta.");
-    await supabaseAdmin.from("profiles").update({ active: data.active }).eq("id", data.workerId);
-    await audit(supabaseAdmin, companyId, context.userId, data.active ? "activate" : "deactivate", data.workerId, {});
+    const { error: auditError } = await supabaseAdmin.from("audit_log").insert({
+      company_id: companyId, actor_id: context.userId, entity: "worker", entity_id: data.workerId,
+      action: data.active ? "activate" : "deactivate", details: {},
+    });
+    if (auditError) throw new Error("El acceso cambio, pero no se pudo guardar el historial. Reintenta la operacion.");
     return { ok: true };
   });
 
