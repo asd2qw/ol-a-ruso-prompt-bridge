@@ -18,3 +18,6 @@
 - UI copy is Spanish; dates via `src/lib/format.ts` (DD/MM/YYYY, Europe/Madrid, EUR).
 - Unfinished modules render `ComingSoon`; never fake functionality.
 - Keep PROJECT_STATUS.md, DATABASE.md, CHANGELOG.md updated at the end of each phase.
+- Phase 2 review SQL lives outside active migrations in `docs/phase2/`; apply only through the managed migration tool after separate SQL approval, so draft review never changes the hosted schema.
+- Phase 2 uses tenant-scoped assignment tables for multiple workers; cascade assignment rows on profile deletion and retain plain creator UUIDs, so deleting accounts cannot invoke protected parent-row updates or erase business history.
+- Worker access changes use `worker-access.ts` with fail-closed ordering and checked writes; no success is returned after partial failure.
