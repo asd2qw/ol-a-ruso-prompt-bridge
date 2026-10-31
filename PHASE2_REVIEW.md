@@ -25,6 +25,15 @@ Estos resultados de borrado pertenecen al entorno aislado: no verifican el conte
 5. Aplicar SQL aprobado únicamente mediante la herramienta de migraciones de Lovable Cloud; no editar el journal ni mover manualmente SQL al conjunto activo.
 6. Mantener CREATE TABLE → GRANT → RLS → políticas para cada nueva tabla. Las comprobaciones de fechas relativas entre columnas son válidas; no dependen de `now()`.
 
-## Pendiente tras aprobación
+## Resultado de la preparación aprobada
 
-Preparar SQL revisado y pruebas persistentes; aplicar por la herramienta gestionada; verificar políticas con sesiones reales y el flujo de eliminación; construir las pantallas. Fase 2 no está terminada.
+- SQL revisado: `docs/phase2/phase2-schema.review.sql`; explicación y límites en `docs/phase2/README.md`.
+- 37 pruebas PostgreSQL en entorno aislado pasan: acceso activo, aislamiento, asignaciones múltiples, notas individuales, campos protegidos, cascadas y conservación de registros al borrar perfiles sin claims de servicio.
+- 10 pruebas Vitest pasan (7 de cambios de acceso, 2 de límites/contraseña, 1 de navegación).
+- Activación/desactivación comprueba errores de perfil, Auth y audit y compensa el fallo de activación con bloqueo. No se ejecutaron cambios de cuentas reales.
+- Página y formulario de trabajadores verificados con sesión real del propietario, sin errores y sin guardar datos. No había trabajadores existentes para probar sus cambios de acceso.
+- Todas las páginas tienen título y metadatos propios. Comprobación de compilación: correcta.
+
+## Pendiente tras aprobación separada del SQL
+
+Aplicar el SQL exacto por la herramienta gestionada, verificar políticas con sesiones reales y el flujo de eliminación; construir las pantallas. Fase 2 no está terminada y Lovable Cloud no se modificó.
