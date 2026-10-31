@@ -9,6 +9,7 @@
 - Navegación completa; módulos no hechos muestran "Próximamente".
 
 ## Pendiente
+- Fase 2: SQL revisado preparado en `docs/phase2/phase2-schema.review.sql`, con asignaciones múltiples y acceso restringido a usuarios activos/autorizados. No aplicado; pendiente aprobación separada. Pruebas PostgreSQL aisladas y errores de activación/desactivación cubiertos; operaciones reales con trabajadores aún sin verificar.
 - Fase 2: clientes, obras, trabajos, calendario.
 - Fase 3: presupuestos, pagos, materiales, almacén, gastos.
 - Fase 4: finanzas, facturas, PDF.

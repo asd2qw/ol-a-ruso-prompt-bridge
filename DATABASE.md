@@ -18,3 +18,10 @@
 - Trabajador: lee solo su perfil y su rol; no puede modificar perfiles ni permisos.
 - Propietario: lee/edita perfiles de su empresa, edita la empresa, lee el historial.
 - Crear/eliminar/bloquear cuentas: solo funciones de servidor que comprueban rol owner.
+
+## Fase 2 — propuesta, no aplicada
+- SQL de revisión: `docs/phase2/phase2-schema.review.sql`; fuera del conjunto de migraciones activo.
+- Propone `clients`, `works`, `work_tasks`, `calendar_events` y tres tablas de asignaciones múltiples, todas aisladas por empresa y perfil activo.
+- Clientes solo propietario; obras según autorización; tareas/eventos según asignación. Notas individuales por asignación.
+- Eliminar perfiles retira asignaciones en cascada sin modificar entidades; UUID de creador conservado sin FK de perfil.
+- Pruebas de PostgreSQL aisladas en `src/test/phase2-database.test.py`; no prueban las sesiones ni el borrado Auth reales.
