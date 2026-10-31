@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/page-head";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { HardHat, Settings, CalendarDays } from "lucide-react";
@@ -8,7 +9,7 @@ import { formatDate } from "@/lib/format";
 import { MAX_WORKERS } from "@/lib/workers-rules";
 
 export const Route = createFileRoute("/_authenticated/inicio")({
-  head: () => ({ meta: [{ title: "Inicio · Gestión de Obras" }] }),
+  head: () => pageHead("Inicio", "Resumen diario de la empresa y del equipo."),
   component: Inicio,
 });
 
