@@ -175,6 +175,61 @@ rollback;""")
     def test_access_disappears_after_all_assignments_removed(self):
         self.assertEqual(self.actor("select count(*) from public.works;", setup="delete from public.work_assignments; delete from public.task_assignments; delete from public.event_assignments;"), ["0"])
 
+    def test_completion_timestamp_cannot_be_forged(self):
+        self.assertEqual(self.actor("update public.work_tasks set status='completed',completed_at='2000-01-01T00:00:00Z'; select (completed_at > '2026-01-01T00:00:00Z')::text from public.work_tasks;"), ["true"])
+
+    def test_completed_timestamp_is_preserved_on_repeated_completion(self):
+        self.assertEqual(self.actor("update public.work_tasks set status='completed'; update public.work_tasks set completed_at='2000-01-01T00:00:00Z'; select (completed_at > '2026-01-01T00:00:00Z')::text from public.work_tasks;"), ["true"])
+
+    def test_noncompleted_task_cannot_have_completion_timestamp(self):
+        self.assertEqual(self.actor("update public.work_tasks set status='in_progress',completed_at='2000-01-01T00:00:00Z'; select (completed_at is null)::text from public.work_tasks;"), ["true"])
+
+    def test_worker_cannot_delete_assignments(self):
+        for table in ["work_assignments", "task_assignments", "event_assignments"]:
+            with self.subTest(table=table):
+                self.assertEqual(self.actor(f"with changed as (delete from public.{table} returning worker_id) select count(*) from changed;"), ["0"])
+
+    def test_owner_can_remove_assignments(self):
+        for table in ["work_assignments", "task_assignments", "event_assignments"]:
+            with self.subTest(table=table):
+                self.assertEqual(self.actor(f"with changed as (delete from public.{table} returning worker_id) select count(*) from changed;", "1"), ["2"])
+
+    def test_all_creator_fields_immutable(self):
+        for table in ["clients", "works", "work_tasks", "calendar_events"]:
+            with self.subTest(table=table):
+                self.actor(f"update public.{table} set created_by='00000000-0000-0000-0000-000000000003';", "1", failure=True)
+
+    def test_creator_insert_spoofing_rejected_for_all_records(self):
+        queries = [
+            "insert into public.works(company_id,name,created_by) select company_id,'Spoof','00000000-0000-0000-0000-000000000002' from public.profiles where id=auth.uid();",
+            "insert into public.work_tasks(company_id,work_id,title,created_by) select company_id,'20000000-0000-0000-0000-000000000001','Spoof','00000000-0000-0000-0000-000000000002' from public.profiles where id=auth.uid();",
+            "insert into public.calendar_events(company_id,title,starts_at,ends_at,created_by) select company_id,'Spoof','2026-11-01T10:00:00Z','2026-11-01T11:00:00Z','00000000-0000-0000-0000-000000000002' from public.profiles where id=auth.uid();",
+        ]
+        for query in queries:
+            with self.subTest(query=query):
+                self.actor(query, "1", failure=True)
+
+    def test_referenced_work_cannot_be_deleted(self):
+        self.actor("delete from public.works where id='20000000-0000-0000-0000-000000000001';", "1", failure=True)
+
+    def test_task_referenced_by_event_cannot_be_deleted(self):
+        self.actor("delete from public.work_tasks where id='30000000-0000-0000-0000-000000000001';", "1", failure=True)
+
+    def test_deleting_event_cascades_only_its_assignments(self):
+        self.assertEqual(self.actor("delete from public.calendar_events where id='40000000-0000-0000-0000-000000000001'; select count(*) from public.event_assignments; select count(*) from public.task_assignments;", "1"), ["0", "2"])
+
+    def test_deleting_unreferenced_task_cascades_assignments(self):
+        self.assertEqual(self.actor("delete from public.calendar_events; delete from public.work_tasks where id='30000000-0000-0000-0000-000000000001'; select count(*) from public.task_assignments; select count(*) from public.work_assignments;", "1"), ["0", "2"])
+
+    def test_deleting_unreferenced_work_cascades_assignments(self):
+        self.assertEqual(self.actor("delete from public.calendar_events; delete from public.work_tasks; delete from public.works where id='20000000-0000-0000-0000-000000000001'; select count(*) from public.work_assignments;", "1"), ["0"])
+
+    def test_inactive_owner_cannot_manage_records(self):
+        self.assertEqual(self.actor("with changed as (update public.works set name='Forbidden' returning id) select count(*) from changed;", "1", setup="update public.profiles set active=false where id='00000000-0000-0000-0000-000000000001';"), ["0"])
+
+    def test_assignment_requires_active_worker(self):
+        self.actor("insert into public.task_assignments(company_id,task_id,worker_id) select company_id,'30000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000002' from public.profiles where id=auth.uid();", "1", failure=True, setup="update public.profiles set active=false where id='00000000-0000-0000-0000-000000000002';")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

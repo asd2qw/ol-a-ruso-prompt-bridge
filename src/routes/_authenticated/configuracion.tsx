@@ -1,3 +1,4 @@
+import { pageHead } from "@/lib/page-head";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/configuracion")({
-  head: () => ({ meta: [{ title: "Configuración · Gestión de Obras" }] }),
+  head: () => pageHead("Configuración", "Datos comerciales y configuracion de la empresa."),
   component: () => (
     <OwnerOnly>
       <Configuracion />
