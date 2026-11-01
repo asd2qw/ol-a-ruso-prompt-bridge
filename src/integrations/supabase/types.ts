@@ -55,6 +55,138 @@ export type Database = {
           },
         ]
       }
+      calendar_events: {
+        Row: {
+          all_day: boolean
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          ends_at: string
+          id: string
+          starts_at: string
+          status: string
+          title: string
+          updated_at: string
+          work_id: string | null
+          work_task_id: string | null
+        }
+        Insert: {
+          all_day?: boolean
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at: string
+          id?: string
+          starts_at: string
+          status?: string
+          title: string
+          updated_at?: string
+          work_id?: string | null
+          work_task_id?: string | null
+        }
+        Update: {
+          all_day?: boolean
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at?: string
+          id?: string
+          starts_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          work_id?: string | null
+          work_task_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "calendar_events_company_id_work_task_id_work_id_fkey"
+            columns: ["company_id", "work_task_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "work_tasks"
+            referencedColumns: ["company_id", "id", "work_id"]
+          },
+        ]
+      }
+      clients: {
+        Row: {
+          active: boolean
+          address: string | null
+          client_type: string
+          company_id: string
+          contact_name: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          legal_name: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          tax_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          address?: string | null
+          client_type?: string
+          company_id: string
+          contact_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          legal_name?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          tax_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          address?: string | null
+          client_type?: string
+          company_id?: string
+          contact_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          legal_name?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          tax_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clients_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           address: string | null
@@ -96,6 +228,55 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      event_assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          event_id: string
+          updated_at: string
+          worker_id: string
+          worker_notes: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          event_id: string
+          updated_at?: string
+          worker_id: string
+          worker_notes?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          event_id?: string
+          updated_at?: string
+          worker_id?: string
+          worker_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_assignments_company_id_event_id_fkey"
+            columns: ["company_id", "event_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "event_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_assignments_company_id_worker_id_fkey"
+            columns: ["company_id", "worker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -144,6 +325,55 @@ export type Database = {
           },
         ]
       }
+      task_assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          task_id: string
+          updated_at: string
+          worker_id: string
+          worker_notes: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          task_id: string
+          updated_at?: string
+          worker_id: string
+          worker_notes?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          task_id?: string
+          updated_at?: string
+          worker_id?: string
+          worker_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_assignments_company_id_task_id_fkey"
+            columns: ["company_id", "task_id"]
+            isOneToOne: false
+            referencedRelation: "work_tasks"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "task_assignments_company_id_worker_id_fkey"
+            columns: ["company_id", "worker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           company_id: string
@@ -173,6 +403,178 @@ export type Database = {
           },
         ]
       }
+      work_assignments: {
+        Row: {
+          company_id: string
+          created_at: string
+          updated_at: string
+          work_id: string
+          worker_id: string
+          worker_notes: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          updated_at?: string
+          work_id: string
+          worker_id: string
+          worker_notes?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          updated_at?: string
+          work_id?: string
+          worker_id?: string
+          worker_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_assignments_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "work_assignments_company_id_worker_id_fkey"
+            columns: ["company_id", "worker_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      work_tasks: {
+        Row: {
+          company_id: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          planned_end_at: string | null
+          planned_start_at: string | null
+          priority: number
+          status: string
+          title: string
+          updated_at: string
+          work_id: string
+        }
+        Insert: {
+          company_id: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          planned_end_at?: string | null
+          planned_start_at?: string | null
+          priority?: number
+          status?: string
+          title: string
+          updated_at?: string
+          work_id: string
+        }
+        Update: {
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          planned_end_at?: string | null
+          planned_start_at?: string | null
+          priority?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          work_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "work_tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "work_tasks_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      works: {
+        Row: {
+          address: string | null
+          client_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          name: string
+          planned_end_date: string | null
+          planned_start_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          client_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          planned_end_date?: string | null
+          planned_start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          client_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          planned_end_date?: string | null
+          planned_start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "works_company_id_client_id_fkey"
+            columns: ["company_id", "client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "works_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -188,6 +590,20 @@ export type Database = {
         Returns: boolean
       }
       is_company_owner: { Args: { _company_id: string }; Returns: boolean }
+      phase2_active_member: { Args: { _company: string }; Returns: boolean }
+      phase2_event_assigned: {
+        Args: { _company: string; _id: string }
+        Returns: boolean
+      }
+      phase2_owner: { Args: { _company: string }; Returns: boolean }
+      phase2_task_assigned: {
+        Args: { _company: string; _id: string }
+        Returns: boolean
+      }
+      phase2_work_visible: {
+        Args: { _company: string; _id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "owner" | "worker"
