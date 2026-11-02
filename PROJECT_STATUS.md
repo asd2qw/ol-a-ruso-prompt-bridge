@@ -10,7 +10,7 @@
 
 ## Pendiente
 - Fase 2: SQL revisado preparado en `docs/phase2/phase2-schema.review.sql`, con asignaciones múltiples y acceso restringido a usuarios activos/autorizados. No aplicado; pendiente aprobación separada. Pruebas PostgreSQL aisladas y errores de activación/desactivación cubiertos; operaciones reales con trabajadores aún sin verificar.
-- Fase 2: clientes hecho (alta, edición, búsqueda, baja). Pendiente: obras, trabajos, calendario.
+- Fase 2: clientes hecho (alta, edición, búsqueda, baja). Obras, trabajos y calendario hechos (con asignación de varios trabajadores).
 - Fase 3: presupuestos, pagos, materiales, almacén, gastos.
 - Fase 4: finanzas, facturas, PDF.
 - Fase 5: horas, equipos, fotos, notificaciones.

@@ -48,7 +48,7 @@ function Inicio() {
         <Link to="/calendario" className="rounded-lg border bg-card p-5 shadow-card transition hover:border-primary">
           <CalendarDays className="mb-3 size-6 text-primary" />
           <p className="font-semibold">Mis trabajos</p>
-          <p className="text-sm text-muted-foreground">El calendario y los trabajos asignados llegarán en la fase 2.</p>
+          <p className="text-sm text-muted-foreground">Consulta tu calendario y los trabajos asignados.</p>
         </Link>
       </div>
     </div>
