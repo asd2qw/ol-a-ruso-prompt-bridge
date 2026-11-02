@@ -129,7 +129,7 @@ function ClientDialog({ client, onClose }: { client: Partial<Client>; onClose: (
   const clean = (v: unknown) => (typeof v === "string" ? v.trim() || null : v);
 
   async function save() {
-    if (!f.name?.trim()) return toast.error("El nombre es obligatorio.");
+    if (!f.name?.trim()) { toast.error("El nombre es obligatorio."); return; }
     if (!user) return;
     setSaving(true);
     const payload = {
@@ -143,7 +143,7 @@ function ClientDialog({ client, onClose }: { client: Partial<Client>; onClose: (
       ? await supabase.from("clients").update(payload).eq("id", client.id)
       : await supabase.from("clients").insert({ ...payload, company_id: user.companyId, created_by: user.id });
     setSaving(false);
-    if (error) return toast.error("No se pudo guardar el cliente.");
+    if (error) { toast.error("No se pudo guardar el cliente."); return; }
     toast.success(client.id ? "Cliente actualizado" : "Cliente creado");
     qc.invalidateQueries({ queryKey: ["clients"] });
     onClose();
