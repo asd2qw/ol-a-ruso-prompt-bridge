@@ -325,6 +325,130 @@ export type Database = {
           },
         ]
       }
+      quote_items: {
+        Row: {
+          company_id: string
+          created_at: string
+          description: string
+          id: string
+          position: number
+          quantity: number
+          quote_id: string
+          unit: string
+          unit_price: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          description: string
+          id?: string
+          position?: number
+          quantity?: number
+          quote_id: string
+          unit?: string
+          unit_price?: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          description?: string
+          id?: string
+          position?: number
+          quantity?: number
+          quote_id?: string
+          unit?: string
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_items_company_id_quote_id_fkey"
+            columns: ["company_id", "quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          client_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          issue_date: string
+          notes: string | null
+          number: string
+          status: string
+          title: string
+          updated_at: string
+          valid_until: string | null
+          vat_rate: number
+          work_id: string | null
+        }
+        Insert: {
+          client_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          number: string
+          status?: string
+          title: string
+          updated_at?: string
+          valid_until?: string | null
+          vat_rate?: number
+          work_id?: string | null
+        }
+        Update: {
+          client_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          number?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          valid_until?: string | null
+          vat_rate?: number
+          work_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_company_id_client_id_fkey"
+            columns: ["company_id", "client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "quotes_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       task_assignments: {
         Row: {
           company_id: string
