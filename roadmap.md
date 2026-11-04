@@ -7,5 +7,5 @@
 - [x] Prepare revised SQL and persistent tests after plan approval.
 - [x] Check activation/deactivation writes and fail-closed error handling.
 - [x] Verify signed-in owner screen and dialog without creating/changing users; real account state changes remain unverified.
-- [ ] Apply revised SQL and verify real authenticated flows — awaiting separate SQL approval.- [x] Phase 2 UI: Clientes screen.
+- [x] Apply revised SQL and verify owner flows (worker flows unverified).- [x] Phase 2 UI: Clientes screen.
 - [x] Phase 2 UI: Obras, Trabajos, Calendario screens.
