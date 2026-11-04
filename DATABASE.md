@@ -25,3 +25,6 @@
 - Clientes solo propietario; obras según autorización; tareas/eventos según asignación. Notas individuales por asignación.
 - Eliminar perfiles retira asignaciones en cascada sin modificar entidades; UUID de creador conservado sin FK de perfil.
 - Pruebas de PostgreSQL aisladas en `src/test/phase2-database.test.py`; no prueban las sesiones ni el borrado Auth reales.
+
+## Fase 3
+- `quotes` (presupuestos: número único por empresa, cliente/obra opcionales, estado, IVA) y `quote_items` (partidas). Solo propietario activo.
