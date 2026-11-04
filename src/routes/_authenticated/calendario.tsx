@@ -34,7 +34,7 @@ type Event = {
 
 const time = (iso: string) => new Intl.DateTimeFormat("es-ES", { timeZone: TIMEZONE, hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 const dayKey = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: TIMEZONE }).format(new Date(iso));
-const monthLabel = (d: Date) => new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric" }).format(d);
+const monthLabel = (d: Date) => { const s = new Intl.DateTimeFormat("es-ES", { month: "long", year: "numeric" }).format(d); return s.charAt(0).toUpperCase() + s.slice(1); };
 
 function Calendario() {
   const qc = useQueryClient();
@@ -86,7 +86,7 @@ function Calendario() {
         actions={isOwner && <Button onClick={() => setEditing({ status: "scheduled", all_day: false, event_assignments: [] })}><Plus className="size-4" /> Nuevo evento</Button>} />
       <div className="mb-4 flex items-center gap-2">
         <Button size="icon" variant="outline" onClick={() => shift(-1)} aria-label="Mes anterior"><ChevronLeft className="size-4" /></Button>
-        <p className="min-w-40 text-center font-semibold capitalize">{monthLabel(month)}</p>
+        <p className="min-w-40 text-center font-semibold">{monthLabel(month)}</p>
         <Button size="icon" variant="outline" onClick={() => shift(1)} aria-label="Mes siguiente"><ChevronRight className="size-4" /></Button>
       </div>
       {isLoading ? <p className="text-sm text-muted-foreground">Cargando…</p> : events.length === 0 ? (
