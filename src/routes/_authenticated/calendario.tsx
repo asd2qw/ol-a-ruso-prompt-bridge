@@ -95,7 +95,7 @@ function Calendario() {
         <div className="space-y-5">
           {[...groups.entries()].map(([day, list]) => (
             <section key={day}>
-              <h2 className="mb-2 text-sm font-semibold text-muted-foreground">{formatDate(list[0].starts_at)}</h2>
+              <h2 className="mb-2 text-sm font-semibold text-muted-foreground">{formatDate(list[0]?.starts_at)}</h2>
               <div className="space-y-2">
                 {list.map((e) => (
                   <div key={e.id} className="flex flex-wrap gap-3 rounded-lg border bg-card p-3 shadow-card">

@@ -97,7 +97,7 @@ function Trabajos() {
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div className="min-w-0">
                   <p className="font-semibold">{t.title}</p>
-                  <p className="text-xs text-muted-foreground">{workName(t.work_id)} · Prioridad {PRIORITY[t.priority].toLowerCase()}</p>
+                  <p className="text-xs text-muted-foreground">{workName(t.work_id)} · Prioridad {(PRIORITY[t.priority] ?? "").toLowerCase()}</p>
                 </div>
                 {t.priority === 1 && <Badge>Alta</Badge>}
               </div>
