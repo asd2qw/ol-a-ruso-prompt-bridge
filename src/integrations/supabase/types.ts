@@ -278,6 +278,66 @@ export type Database = {
           },
         ]
       }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          company_id: string
+          created_at: string
+          created_by: string
+          description: string
+          expense_date: string
+          id: string
+          notes: string | null
+          supplier: string | null
+          updated_at: string
+          work_id: string | null
+        }
+        Insert: {
+          amount: number
+          category?: string
+          company_id: string
+          created_at?: string
+          created_by?: string
+          description: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          supplier?: string | null
+          updated_at?: string
+          work_id?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          description?: string
+          expense_date?: string
+          id?: string
+          notes?: string | null
+          supplier?: string | null
+          updated_at?: string
+          work_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           active: boolean
@@ -726,6 +786,10 @@ export type Database = {
       }
       phase2_work_visible: {
         Args: { _company: string; _id: string }
+        Returns: boolean
+      }
+      phase3_can_register_expenses: {
+        Args: { _company: string }
         Returns: boolean
       }
     }
