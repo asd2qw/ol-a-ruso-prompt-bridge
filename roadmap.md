@@ -11,3 +11,4 @@
 - [x] Phase 2 UI: Obras, Trabajos, Calendario screens.
 - [x] Phase 3: Presupuestos.
 - [ ] Phase 3: Gastos, Materiales/almacén, Pagos.
+- [ ] Update HANDOFF.md with full status for another AI.
