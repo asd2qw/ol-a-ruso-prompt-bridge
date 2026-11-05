@@ -29,6 +29,13 @@
       "when": 1793752156065,
       "tag": "0003_phase3_quotes",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793837055812,
+      "tag": "0004_phase3_expenses",
+      "breakpoints": true
     }
   ]
 }
