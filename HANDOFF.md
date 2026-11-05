@@ -50,33 +50,33 @@ configuración. Interfaz en español.
 - Módulos no terminados: pantalla `ComingSoon`. Nunca simular datos ni funcionalidad falsa.
 - Copys en español; fechas e importes siempre por `src/lib/format.ts`.
 
-## 6. Estado actual
+## 6. Estado actual (05/11/2026)
 
-**Fase 1 — terminada:** base de datos, autenticación por correo/contraseña, recuperación
-de contraseña, primer propietario, gestión de trabajadores (crear, editar, permisos de
-gastos/materiales, activar/desactivar, cambiar contraseña, eliminar, historial en
-`audit_log`), configuración de empresa (datos, prefijo de facturas, IVA por defecto),
-navegación completa.
+**Fase 1 — terminada:** autenticación, primer propietario, trabajadores (máx. 15, permisos, activar/desactivar, eliminar, `audit_log`), configuración de empresa.
 
-**Pendiente:**
-- Fase 2: clientes, obras, trabajos, calendario.
-- Fase 3: presupuestos, pagos, materiales, almacén, gastos.
-- Fase 4: finanzas, facturas, PDF.
-- Fase 5: horas, equipos, fotos, notificaciones.
-- Fase 6: PWA instalable, pruebas, seguridad.
+**Fase 2 — terminada (verificada como propietario):**
+- Clientes (solo propietario): alta, edición, búsqueda, baja.
+- Obras: propietario crea/edita; asigna varios trabajadores (`work_assignments`). El trabajador solo ve obras donde participa.
+- Trabajos (`work_tasks`): por obra, prioridad, fechas, varios asignados. El trabajador solo cambia el estado de los suyos.
+- Calendario (`calendar_events`): vista mensual por días, ligado a obra/trabajo, varios asignados.
+- Componentes comunes: `src/components/phase2-shared.tsx` (estados, selector de trabajadores, sincronización de asignaciones).
+
+**Fase 3 — en curso:**
+- Presupuestos (hecho, solo propietario): `quotes` + `quote_items`, numeración `P-AAAA-NNN`, IVA, estados. Reglas en `src/lib/quote-rules.ts`.
+- Gastos (hecho): `expenses`. Propietario ve y edita todo; trabajador con permiso `can_register_expenses` registra y ve solo los suyos (no edita ni borra). Reglas en `src/lib/expense-rules.ts`.
+- Pendiente: Pagos, Materiales, Almacén.
+
+**Siguientes fases:** 4 finanzas, facturas, PDF de presupuestos/facturas; 5 horas, equipos, fotos, notificaciones; 6 PWA, seguridad.
+
+**Sin verificar:** flujos reales con una cuenta de trabajador (visibilidad por asignación, cambio de estado, registro de gastos).
 
 ## 7. Cambios en la base de datos
 
-- El esquema vive en `drizzle/migrations/0000_migration.sql`.
-- **Las migraciones no se aplican solas** al sincronizar con GitHub/GitLab/Bitbucket ni al
-  ejecutar la app. Hay que aplicarlas en el backend de destino (desde el editor original,
-  o con la herramienta SQL de la plataforma que hospede la base de datos).
-- Al crear tablas nuevas: `company_id`, RLS activada con políticas, y GRANT correspondiente.
-  Sin políticas la tabla queda inaccesible.
-- No modificar tablas ni funciones de los esquemas `auth`, `storage`, `realtime`,
-  `supabase_functions`, `vault`.
-- Tablas de aplicación: guardar IDs de usuario como UUIDs o referenciar `public.profiles`,
-  sin claves foráneas a `auth.users` (solo `profiles` y `user_roles` pueden referirlo).
+- Migraciones aplicadas en orden en `drizzle/migrations/`: `0000` (fase 1), `0001`–`0002` (fase 2), `0003` (presupuestos), `0004` (gastos).
+- **No se aplican solas** al sincronizar con Git: en otro backend hay que ejecutarlas en orden.
+- Funciones de acceso: `phase2_active_member`, `phase2_owner`, `phase2_work_visible`, `phase2_task_assigned`, `phase2_event_assigned`, `phase3_can_register_expenses` (security definer). Un trabajador inactivo no tiene acceso a nada.
+- Tablas nuevas: `company_id`, GRANT, RLS y políticas en la misma migración; IDs de usuario como UUID sin FK a `auth.users`.
+- No tocar esquemas `auth`, `storage`, `realtime`, `supabase_functions`, `vault`.
 
 ## 8. Datos y copias de seguridad
 
@@ -86,8 +86,6 @@ separado desde el panel del backend, y aplicar antes el esquema en la base de da
 Los usuarios existentes eligen una contraseña nueva en su primera visita si se migra a otro
 backend.
 
-## 9. Sugerencia de primer paso
+## 9. Siguiente paso sugerido
 
-Empezar por la Fase 2: tablas `clients` y `works` (obras) con `company_id` + RLS, pantallas
-de listado/alta/edición, y pruebas de las reglas en `src/test/`. Mantener actualizados
-`PROJECT_STATUS.md`, `DATABASE.md` y `CHANGELOG.md` al cerrar cada fase.
+Fase 3 restante: **Pagos** (cobros de clientes por obra/presupuesto) y **Materiales/Almacén** (catálogo, stock, consumo por obra; trabajador con `can_register_materials`). Seguir el patrón de `gastos.tsx`: migración con RLS, reglas puras en `src/lib/*-rules.ts` con pruebas en `src/test/`, pantalla en español. Después, probar con una cuenta de trabajador real. Actualizar `PROJECT_STATUS.md`, `DATABASE.md`, `CHANGELOG.md` y este archivo al terminar.

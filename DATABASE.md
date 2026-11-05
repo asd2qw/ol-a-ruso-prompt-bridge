@@ -28,3 +28,4 @@
 
 ## Fase 3
 - `quotes` (presupuestos: número único por empresa, cliente/obra opcionales, estado, IVA) y `quote_items` (partidas). Solo propietario activo.
+- `expenses` (gastos: fecha, categoría, importe, obra opcional, proveedor). Propietario: todo; trabajador con permiso: crea y lee los suyos.

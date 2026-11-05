@@ -12,3 +12,4 @@
 ## Fase 3 (parcial)
 - Presupuestos: partidas, IVA, numeración P-AAAA-NNN, estados.
 - Obras, Trabajos y Calendario con asignación de varios trabajadores.
+- Gastos: registro por propietario y trabajadores con permiso, filtro por mes y obra, total.

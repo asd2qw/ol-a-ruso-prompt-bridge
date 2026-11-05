@@ -10,5 +10,6 @@
 - [x] Apply revised SQL and verify owner flows (worker flows unverified).- [x] Phase 2 UI: Clientes screen.
 - [x] Phase 2 UI: Obras, Trabajos, Calendario screens.
 - [x] Phase 3: Presupuestos.
-- [ ] Phase 3: Gastos, Materiales/almacén, Pagos.
-- [ ] Update HANDOFF.md with full status for another AI.
+- [x] Phase 3: Gastos.
+- [ ] Phase 3: Materiales/almacén, Pagos.
+- [x] Update HANDOFF.md with full status for another AI.
