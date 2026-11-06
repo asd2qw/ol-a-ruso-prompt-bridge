@@ -289,8 +289,10 @@ export type Database = {
           expense_date: string
           id: string
           notes: string | null
+          receipt_path: string | null
           supplier: string | null
           updated_at: string
+          vat_amount: number | null
           work_id: string | null
         }
         Insert: {
@@ -303,8 +305,10 @@ export type Database = {
           expense_date?: string
           id?: string
           notes?: string | null
+          receipt_path?: string | null
           supplier?: string | null
           updated_at?: string
+          vat_amount?: number | null
           work_id?: string | null
         }
         Update: {
@@ -317,8 +321,10 @@ export type Database = {
           expense_date?: string
           id?: string
           notes?: string | null
+          receipt_path?: string | null
           supplier?: string | null
           updated_at?: string
+          vat_amount?: number | null
           work_id?: string | null
         }
         Relationships: [
@@ -331,6 +337,130 @@ export type Database = {
           },
           {
             foreignKeyName: "expenses_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      materials: {
+        Row: {
+          active: boolean
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          min_stock: number
+          name: string
+          unit: string
+          unit_cost: number | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          min_stock?: number
+          name: string
+          unit?: string
+          unit_cost?: number | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          min_stock?: number
+          name?: string
+          unit?: string
+          unit_cost?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "materials_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          client_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          method: string
+          notes: string | null
+          payment_date: string
+          quote_id: string | null
+          reference: string | null
+          updated_at: string
+          work_id: string | null
+        }
+        Insert: {
+          amount: number
+          client_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          quote_id?: string | null
+          reference?: string | null
+          updated_at?: string
+          work_id?: string | null
+        }
+        Update: {
+          amount?: number
+          client_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          quote_id?: string | null
+          reference?: string | null
+          updated_at?: string
+          work_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_company_id_client_id_fkey"
+            columns: ["company_id", "client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_company_id_quote_id_fkey"
+            columns: ["company_id", "quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "payments_company_id_work_id_fkey"
             columns: ["company_id", "work_id"]
             isOneToOne: false
             referencedRelation: "works"
@@ -502,6 +632,67 @@ export type Database = {
           },
           {
             foreignKeyName: "quotes_company_id_work_id_fkey"
+            columns: ["company_id", "work_id"]
+            isOneToOne: false
+            referencedRelation: "works"
+            referencedColumns: ["company_id", "id"]
+          },
+        ]
+      }
+      stock_movements: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string
+          id: string
+          kind: string
+          material_id: string
+          movement_date: string
+          notes: string | null
+          quantity: number
+          work_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind: string
+          material_id: string
+          movement_date?: string
+          notes?: string | null
+          quantity: number
+          work_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind?: string
+          material_id?: string
+          movement_date?: string
+          notes?: string | null
+          quantity?: number
+          work_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_movements_company_id_material_id_fkey"
+            columns: ["company_id", "material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["company_id", "id"]
+          },
+          {
+            foreignKeyName: "stock_movements_company_id_work_id_fkey"
             columns: ["company_id", "work_id"]
             isOneToOne: false
             referencedRelation: "works"
@@ -774,6 +965,13 @@ export type Database = {
         Returns: boolean
       }
       is_company_owner: { Args: { _company_id: string }; Returns: boolean }
+      material_stock: {
+        Args: { _company: string }
+        Returns: {
+          material_id: string
+          stock: number
+        }[]
+      }
       phase2_active_member: { Args: { _company: string }; Returns: boolean }
       phase2_event_assigned: {
         Args: { _company: string; _id: string }
@@ -789,6 +987,10 @@ export type Database = {
         Returns: boolean
       }
       phase3_can_register_expenses: {
+        Args: { _company: string }
+        Returns: boolean
+      }
+      phase3_can_register_materials: {
         Args: { _company: string }
         Returns: boolean
       }
