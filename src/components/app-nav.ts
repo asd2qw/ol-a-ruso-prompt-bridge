@@ -1,6 +1,6 @@
 import {
   Home, CalendarDays, ClipboardList, Users, Building2, HardHat, Package,
-  Receipt, PiggyBank, FileText, FileCheck2, Wrench, Settings,
+  Receipt, PiggyBank, Wallet, FileText, FileCheck2, Wrench, Settings,
 } from "lucide-react";
 
 export const NAV_ITEMS = [
@@ -12,6 +12,7 @@ export const NAV_ITEMS = [
   { to: "/trabajadores", label: "Trabajadores", icon: HardHat, ownerOnly: true },
   { to: "/materiales", label: "Materiales", icon: Package, ownerOnly: false },
   { to: "/gastos", label: "Gastos", icon: Receipt, ownerOnly: false },
+  { to: "/pagos", label: "Pagos", icon: Wallet, ownerOnly: true },
   { to: "/finanzas", label: "Finanzas", icon: PiggyBank, ownerOnly: true },
   { to: "/presupuestos", label: "Presupuestos", icon: FileText, ownerOnly: true },
   { to: "/facturas", label: "Facturas", icon: FileCheck2, ownerOnly: true },
