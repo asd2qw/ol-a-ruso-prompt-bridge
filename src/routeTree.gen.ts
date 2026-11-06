@@ -23,6 +23,7 @@ import { Route as AuthenticatedGastosRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedInicioRouteImport } from './routes/_authenticated/inicio'
 import { Route as AuthenticatedMaterialesRouteImport } from './routes/_authenticated/materiales'
 import { Route as AuthenticatedObrasRouteImport } from './routes/_authenticated/obras'
+import { Route as AuthenticatedPagosRouteImport } from './routes/_authenticated/pagos'
 import { Route as AuthenticatedPresupuestosRouteImport } from './routes/_authenticated/presupuestos'
 import { Route as AuthenticatedTrabajadoresRouteImport } from './routes/_authenticated/trabajadores'
 import { Route as AuthenticatedTrabajosRouteImport } from './routes/_authenticated/trabajos'
@@ -97,6 +98,11 @@ const AuthenticatedObrasRoute = AuthenticatedObrasRouteImport.update({
   path: '/obras',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPagosRoute = AuthenticatedPagosRouteImport.update({
+  id: '/pagos',
+  path: '/pagos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPresupuestosRoute =
   AuthenticatedPresupuestosRouteImport.update({
     id: '/presupuestos',
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/inicio': typeof AuthenticatedInicioRoute
   '/materiales': typeof AuthenticatedMaterialesRoute
   '/obras': typeof AuthenticatedObrasRoute
+  '/pagos': typeof AuthenticatedPagosRoute
   '/presupuestos': typeof AuthenticatedPresupuestosRoute
   '/trabajadores': typeof AuthenticatedTrabajadoresRoute
   '/trabajos': typeof AuthenticatedTrabajosRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByTo {
   '/inicio': typeof AuthenticatedInicioRoute
   '/materiales': typeof AuthenticatedMaterialesRoute
   '/obras': typeof AuthenticatedObrasRoute
+  '/pagos': typeof AuthenticatedPagosRoute
   '/presupuestos': typeof AuthenticatedPresupuestosRoute
   '/trabajadores': typeof AuthenticatedTrabajadoresRoute
   '/trabajos': typeof AuthenticatedTrabajosRoute
@@ -167,6 +175,7 @@ export interface FileRoutesById {
   '/_authenticated/inicio': typeof AuthenticatedInicioRoute
   '/_authenticated/materiales': typeof AuthenticatedMaterialesRoute
   '/_authenticated/obras': typeof AuthenticatedObrasRoute
+  '/_authenticated/pagos': typeof AuthenticatedPagosRoute
   '/_authenticated/presupuestos': typeof AuthenticatedPresupuestosRoute
   '/_authenticated/trabajadores': typeof AuthenticatedTrabajadoresRoute
   '/_authenticated/trabajos': typeof AuthenticatedTrabajosRoute
@@ -187,6 +196,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/materiales'
     | '/obras'
+    | '/pagos'
     | '/presupuestos'
     | '/trabajadores'
     | '/trabajos'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/inicio'
     | '/materiales'
     | '/obras'
+    | '/pagos'
     | '/presupuestos'
     | '/trabajadores'
     | '/trabajos'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/_authenticated/inicio'
     | '/_authenticated/materiales'
     | '/_authenticated/obras'
+    | '/_authenticated/pagos'
     | '/_authenticated/presupuestos'
     | '/_authenticated/trabajadores'
     | '/_authenticated/trabajos'
@@ -336,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedObrasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pagos': {
+      id: '/_authenticated/pagos'
+      path: '/pagos'
+      fullPath: '/pagos'
+      preLoaderRoute: typeof AuthenticatedPagosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/presupuestos': {
       id: '/_authenticated/presupuestos'
       path: '/presupuestos'
@@ -371,6 +390,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedInicioRoute: typeof AuthenticatedInicioRoute
   AuthenticatedMaterialesRoute: typeof AuthenticatedMaterialesRoute
   AuthenticatedObrasRoute: typeof AuthenticatedObrasRoute
+  AuthenticatedPagosRoute: typeof AuthenticatedPagosRoute
   AuthenticatedPresupuestosRoute: typeof AuthenticatedPresupuestosRoute
   AuthenticatedTrabajadoresRoute: typeof AuthenticatedTrabajadoresRoute
   AuthenticatedTrabajosRoute: typeof AuthenticatedTrabajosRoute
@@ -387,6 +407,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedInicioRoute: AuthenticatedInicioRoute,
   AuthenticatedMaterialesRoute: AuthenticatedMaterialesRoute,
   AuthenticatedObrasRoute: AuthenticatedObrasRoute,
+  AuthenticatedPagosRoute: AuthenticatedPagosRoute,
   AuthenticatedPresupuestosRoute: AuthenticatedPresupuestosRoute,
   AuthenticatedTrabajadoresRoute: AuthenticatedTrabajadoresRoute,
   AuthenticatedTrabajosRoute: AuthenticatedTrabajosRoute,
